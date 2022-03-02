@@ -110,8 +110,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 //  93, Side led 08
 
 uint8_t thisHue = 0;
-uint8_t thisSat = 255;
-uint8_t thisVal = 255;
+uint8_t thisSat = 0;
+uint8_t thisVal = 100;
 const int SIZE = 8;
 int leftSideLEDs[] = { 69, 72, 75, 78, 82, 85, 89, 93 };
 int rightSideLEDs[] = { 68, 71, 74, 77, 81, 84, 88, 92 };
@@ -175,26 +175,26 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             rgb_matrix_set_color(leftSideLEDs[i], rgb.r, rgb.g, rgb.b);
             rgb_matrix_set_color(rightSideLEDs[i], rgb.r, rgb.g, rgb.b);
         }
+    }
 
-        uint8_t layer = get_highest_layer(layer_state);
+    uint8_t layer = get_highest_layer(layer_state);
 
-        if (layer > 0) {
-            for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-                for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-                    uint8_t index = g_led_config.matrix_co[row][col];
+    if (layer > 0) {
+        for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
+            for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+                uint8_t index = g_led_config.matrix_co[row][col];
 
-                    if (index >= led_min && index <= led_max && index != NO_LED &&
+                if (index >= led_min && index <= led_max && index != NO_LED &&
                     keymap_key_to_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
-                        rgb_matrix_set_color(index, RGB_YELLOW);
-                    }
+                    rgb_matrix_set_color(index, RGB_YELLOW);
                 }
             }
-
-            // Set Media control colors
-            rgb_matrix_set_color(28, RGB_BLUE); // F9. "Prev Track"
-            rgb_matrix_set_color(34, RGB_BLUE); // F10 "Next track"
-            rgb_matrix_set_color(39, RGB_GREEN); //F11 "Play"
-            rgb_matrix_set_color(44, RGB_RED); // F12 "Stop"
         }
+
+        // Set Media control colors
+        rgb_matrix_set_color(28, RGB_BLUE); // F9. "Prev Track"
+        rgb_matrix_set_color(34, RGB_BLUE); // F10 "Next track"
+        rgb_matrix_set_color(39, RGB_GREEN); //F11 "Play"
+        rgb_matrix_set_color(44, RGB_RED); // F12 "Stop"
     }
 }
